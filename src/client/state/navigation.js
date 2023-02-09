@@ -369,6 +369,12 @@ class Navigation extends EventEmitter {
           action.event,
         );
       },
+      [cons.actions.navigation.OPEN_TEXTTRANSLATE]: () => {
+        this.emit(
+          cons.events.navigation.TEXTTRANSLATE_OPENED,
+          action.event,
+        )
+      },
       [cons.actions.navigation.CLICK_REPLY_TO]: () => {
         this.emit(
           cons.events.navigation.REPLY_TO_CLICKED,

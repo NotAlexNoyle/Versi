@@ -139,6 +139,13 @@ export function openViewSource(event) {
   });
 }
 
+export function openTextTranslate(event) {
+  appDispatcher.dispatch({
+    type: cons.actions.navigation.OPEN_TEXTTRANSLATE,
+    event,
+  });
+}
+
 export function replyTo(userId, eventId, body, formattedBody) {
   appDispatcher.dispatch({
     type: cons.actions.navigation.CLICK_REPLY_TO,

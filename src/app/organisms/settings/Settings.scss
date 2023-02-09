@@ -24,6 +24,17 @@
     padding: 0 var(--sp-normal);
     @include dir.side(padding, var(--sp-normal), var(--sp-extra-tight));
   }
+
+  & form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-tight);
+    margin: var(--sp-extra-tight) 0 var(--sp-normal);
+      .input-container {
+        flex-grow: 1;
+    }
+  }
+
 }
 .settings-window__card {
   margin: var(--sp-normal) 0;

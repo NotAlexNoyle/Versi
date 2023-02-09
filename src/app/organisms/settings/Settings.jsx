@@ -13,6 +13,7 @@ import { usePermission } from '../../hooks/usePermission';
 
 import Text from '../../atoms/text/Text';
 import IconButton from '../../atoms/button/IconButton';
+import Input from '../../atoms/input/Input';
 import Button from '../../atoms/button/Button';
 import Toggle from '../../atoms/button/Toggle';
 import Tabs from '../../atoms/tabs/Tabs';
@@ -44,8 +45,18 @@ import CrossIC from '../../../../public/res/ic/outlined/cross.svg';
 import CinnySVG from '../../../../public/res/svg/cinny.svg';
 import { confirmDialog } from '../../molecules/confirm-dialog/ConfirmDialog';
 
+
 function AppearanceSection() {
   const [, updateState] = useState({});
+
+  const handleSetLanguage = (evt) => {
+    evt.preventDefault();
+    const { keywordInput } = evt.target.elements;
+    const value = keywordInput.value.trim();
+    if (value === '') return;
+    settings.setTranslationLanguage(value);
+    document.getElementById('set-button').getElementsByClassName("text-normal")[0].textContent = "Done!";
+  };
 
   return (
     <div className="settings-appearance">
@@ -112,6 +123,37 @@ function AppearanceSection() {
             />
           )}
           content={<Text variant="b3">Hide nick and avatar change messages from room timeline.</Text>}
+        />
+      </div>
+      <div className="settings-appearance__card">
+        <MenuHeader>Translation</MenuHeader>
+        <SettingTile
+          title="Select API"
+          content={(
+            <SegmentedControls
+              selected={settings.getTranslationAPIIndex()}
+              segments={[
+                { text: 'Google' },
+                { text: 'DeepL' }
+              ]}
+              onSelect={(index) => {
+                settings.setTranslationAPI(index);
+                updateState({});
+              }}
+            />
+        )}
+        />
+        <SettingTile
+          title="Custom Target Language"
+          content={(
+            <div>
+              <Text variant="b3">Set a language which you prefer. e.g.: English=EN</Text>
+              <form onSubmit={handleSetLanguage}>
+                <Input name="keywordInput" required value={settings.getTranslationLanguage()} />
+                <Button variant="primary" type="submit" id="set-button">Set</Button>
+              </form>
+            </div>
+          )}
         />
       </div>
     </div>

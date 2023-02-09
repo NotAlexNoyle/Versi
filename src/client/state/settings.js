@@ -22,6 +22,8 @@ class Settings extends EventEmitter {
 
     this.themes = ['', 'silver-theme', 'dark-theme', 'butter-theme'];
     this.themeIndex = this.getThemeIndex();
+    this.translationIndex = this.getTranslationAPIIndex();
+    this.translationLanguage = this.getTranslationLanguage();
 
     this.useSystemTheme = this.getUseSystemTheme();
     this.isMarkdown = this.getIsMarkdown();
@@ -42,6 +44,25 @@ class Settings extends EventEmitter {
     if (typeof settings.themeIndex === 'undefined') return 0;
     // eslint-disable-next-line radix
     return parseInt(settings.themeIndex);
+  }
+
+  getTranslationAPIIndex() {
+    if (typeof this.translationIndex === 'number') return this.translationIndex;
+
+    const settings = getSettings();
+    if (settings === null) return 0;
+    if (typeof settings.translationIndex === 'undefined') return 0;
+    // eslint-disable-next-line radix
+    return parseInt(settings.translationIndex);
+  }
+
+  getTranslationLanguage() {
+    if (typeof this.translationLanguage === 'string') return this.translationLanguage;
+
+    const settings = getSettings();
+    if (settings === null) return 'en';
+    if (typeof settings.translationLanguage === 'undefined') return 'en';
+    return settings.translationLanguage;
   }
 
   getThemeName() {
@@ -69,6 +90,16 @@ class Settings extends EventEmitter {
     this.themeIndex = themeIndex;
     setSettings('themeIndex', this.themeIndex);
     this.applyTheme();
+  }
+
+  setTranslationAPI(translationIndex) {
+    this.translationIndex = translationIndex;
+    setSettings('translationIndex', this.translationIndex);
+  }
+
+  setTranslationLanguage(translationLanguage) {
+    this.translationLanguage = translationLanguage;
+    setSettings('translationLanguage', this.translationLanguage);
   }
 
   toggleUseSystemTheme() {

@@ -11,12 +11,14 @@ import JoinAlias from '../join-alias/JoinAlias';
 import EmojiVerification from '../emoji-verification/EmojiVerification';
 
 import ReusableDialog from '../../molecules/dialog/ReusableDialog';
+import TextTranslate from '../text-translate/TextTranslate';
 
 function Dialogs() {
   return (
     <>
       <ReadReceipts />
       <ViewSource />
+      <TextTranslate />
       <ProfileViewer />
       <ShortcutSpaces />
       <CreateRoom />
