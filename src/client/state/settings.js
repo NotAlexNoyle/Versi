@@ -24,12 +24,14 @@ class Settings extends EventEmitter {
     this.themeIndex = this.getThemeIndex();
     this.translationIndex = this.getTranslationAPIIndex();
     this.translationLanguage = this.getTranslationLanguage();
+    this.translationSelfLanguage = this.getTranslationSelfLanguage();
 
     this.useSystemTheme = this.getUseSystemTheme();
     this.isMarkdown = this.getIsMarkdown();
     this.isPeopleDrawer = this.getIsPeopleDrawer();
     this.hideMembershipEvents = this.getHideMembershipEvents();
     this.hideNickAvatarEvents = this.getHideNickAvatarEvents();
+    this.enableSelfTranslate = this.getEnableSelfTranslate();
     this._showNotifications = this.getShowNotifications();
     this.isNotificationSounds = this.getIsNotificationSounds();
 
@@ -63,6 +65,15 @@ class Settings extends EventEmitter {
     if (settings === null) return 'en';
     if (typeof settings.translationLanguage === 'undefined') return 'en';
     return settings.translationLanguage;
+  }
+
+  getTranslationSelfLanguage() {
+    if (typeof this.translationSelfLanguage === 'string') return this.translationSelfLanguage;
+
+    const settings = getSettings();
+    if (settings === null) return 'en';
+    if (typeof settings.translationSelfLanguage === 'undefined') return 'en';
+    return settings.translationSelfLanguage;
   }
 
   getThemeName() {
@@ -100,6 +111,11 @@ class Settings extends EventEmitter {
   setTranslationLanguage(translationLanguage) {
     this.translationLanguage = translationLanguage;
     setSettings('translationLanguage', this.translationLanguage);
+  }
+
+  setTranslationSelfLanguage(translationSelfLanguage) {
+    this.translationSelfLanguage = translationSelfLanguage;
+    setSettings('translationSelfLanguage', this.translationSelfLanguage);
   }
 
   toggleUseSystemTheme() {
@@ -144,6 +160,15 @@ class Settings extends EventEmitter {
     if (settings === null) return true;
     if (typeof settings.hideNickAvatarEvents === 'undefined') return true;
     return settings.hideNickAvatarEvents;
+  }
+
+  getEnableSelfTranslate() {
+    if (typeof this.enableSelfTranslate === 'boolean') return this.enableSelfTranslate;
+
+    const settings = getSettings();
+    if (settings === null) return false;
+    if (typeof settings.enableSelfTranslate === 'undefined') return false;
+    return settings.enableSelfTranslate;
   }
 
   getIsPeopleDrawer() {
@@ -202,6 +227,11 @@ class Settings extends EventEmitter {
         this.hideNickAvatarEvents = !this.hideNickAvatarEvents;
         setSettings('hideNickAvatarEvents', this.hideNickAvatarEvents);
         this.emit(cons.events.settings.NICKAVATAR_EVENTS_TOGGLED, this.hideNickAvatarEvents);
+      },
+      [cons.actions.settings.TOGGLE_SELF_TRANSLATE]: () => {
+        this.enableSelfTranslate = !this.enableSelfTranslate;
+        setSettings('enableSelfTranslate', this.enableSelfTranslate);
+        this.emit(cons.events.settings.SELF_TRANSLATE_TOGGLED, this.enableSelfTranslate);
       },
       [cons.actions.settings.TOGGLE_NOTIFICATIONS]: async () => {
         if (window.Notification?.permission !== 'granted') {

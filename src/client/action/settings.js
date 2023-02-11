@@ -31,6 +31,12 @@ export function toggleNickAvatarEvents() {
   });
 }
 
+export function toggleSelfTranslate() {
+  appDispatcher.dispatch({
+    type: cons.actions.settings.TOGGLE_SELF_TRANSLATE,
+  });
+}
+
 export function toggleNotifications() {
   appDispatcher.dispatch({
     type: cons.actions.settings.TOGGLE_NOTIFICATIONS,

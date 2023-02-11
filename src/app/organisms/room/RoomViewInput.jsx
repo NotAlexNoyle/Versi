@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './RoomViewInput.scss';
+import { generateRequestUrl, normaliseResponse } from 'google-translate-api-browser';
 
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -39,9 +40,7 @@ const CMD_REGEX = /(^\/|:|@)(\S*)$/;
 let isTyping = false;
 let isCmdActivated = false;
 let cmdCursorPos = null;
-function RoomViewInput({
-  roomId, roomTimeline, viewEvent,
-}) {
+function RoomViewInput({ roomId, roomTimeline, viewEvent }) {
   const [attachment, setAttachment] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
 
@@ -83,7 +82,9 @@ function RoomViewInput({
   function uploadingProgress(myRoomId, { loaded, total }) {
     if (myRoomId !== roomId) return;
     const progressPer = Math.round((loaded * 100) / total);
-    uploadProgressRef.current.textContent = `Uploading: ${bytesToSize(loaded)}/${bytesToSize(total)} (${progressPer}%)`;
+    uploadProgressRef.current.textContent = `Uploading: ${bytesToSize(loaded)}/${bytesToSize(
+      total
+    )} (${progressPer}%)`;
     inputBaseRef.current.style.backgroundImage = `linear-gradient(90deg, var(--bg-surface-hover) ${progressPer}%, var(--bg-surface-low) ${progressPer}%)`;
   }
   function clearAttachment(myRoomId) {
@@ -133,7 +134,7 @@ function RoomViewInput({
     textAreaRef.current.value = replaceCmdWith(
       msg,
       cmdCursorPos,
-      typeof cmdData?.replace !== 'undefined' ? cmdData.replace : '',
+      typeof cmdData?.replace !== 'undefined' ? cmdData.replace : ''
     );
     deactivateCmd();
   }
@@ -146,7 +147,10 @@ function RoomViewInput({
   function setUpReply(userId, eventId, body, formattedBody) {
     setReplyTo({ userId, eventId, body });
     roomsInput.setReplyTo(roomId, {
-      userId, eventId, body, formattedBody,
+      userId,
+      eventId,
+      body,
+      formattedBody,
     });
     focusInput();
   }
@@ -221,17 +225,66 @@ function RoomViewInput({
     commands[cmdName].exe(roomId, cmdData);
   };
 
+  async function translate(translateUrl) {
+    const response = await fetch(`${translateUrl}`);
+    if (!response.ok) {
+      throw new Error('Request failed');
+    }
+    const body = await response.json();
+    if (settings.getTranslationAPIIndex() === 1) {
+      let result = '';
+      for (let i = 0; i < body.translations.length; i += 1) {
+        result += body.translations[i].text;
+      }
+      if (result === undefined) {
+        result = body.message;
+      }
+      return result;
+    }
+    return normaliseResponse(body, settings.getTranslationSelfLanguage());
+  }
+
+  async function translateText(text) {
+    const origin = text.replace(/> <.*> .*\n/gms, '').trim();
+    let url = generateRequestUrl(origin, { to: settings.getTranslationSelfLanguage() }).replace(
+      'https://translate.google.com/',
+      'https://panel.icarus.today/'
+    );
+
+    if (settings.getTranslationAPIIndex() === 1) {
+      url = `https://rwwhwqaduuvdbswpmq6p.icarus.today/&text=${origin}&target_lang=${settings.getTranslationSelfLanguage()}`;
+    }
+
+    return translate(url);
+  }
+
   const sendMessage = async () => {
     requestAnimationFrame(() => deactivateCmdAndEmit());
-    const msgBody = textAreaRef.current.value.trim();
-    if (msgBody.startsWith('/')) {
-      processCommand(msgBody.trim());
+    const originalMsg = textAreaRef.current.value.trim();
+
+    if (originalMsg.startsWith('/')) {
+      processCommand(originalMsg.trim());
       textAreaRef.current.value = '';
       textAreaRef.current.style.height = 'unset';
       return;
     }
-    if (msgBody === '' && attachment === null) return;
-    sendBody(msgBody);
+    if (originalMsg === '' && attachment === null) return;
+
+    if (originalMsg.length > 0 && settings.enableSelfTranslate) {
+      document.getElementById('message-textarea').disabled = true;
+      translateText(originalMsg).then((result) => {
+        let msgBody = '';
+        if (settings.getTranslationAPIIndex() === 0) msgBody = result.text;
+        else msgBody = result;
+        msgBody += ` (Translated to: ${settings.getTranslationSelfLanguage()})`;
+        msgBody += `\nOriginal Text: \n\`${originalMsg}\``;
+        sendBody(msgBody);
+        document.getElementById('message-textarea').disabled = false;
+      });
+      return;
+    }
+
+    sendBody(originalMsg);
   };
 
   const handleSendSticker = async (data) => {
@@ -351,19 +404,31 @@ function RoomViewInput({
     if (!canISend || tombstoneEvent) {
       return (
         <Text className="room-input__alert">
-          {
-            tombstoneEvent
-              ? tombstoneEvent.getContent()?.body ?? 'This room has been replaced and is no longer active.'
-              : 'You do not have permission to post to this room'
-          }
+          {tombstoneEvent
+            ? tombstoneEvent.getContent()?.body ??
+              'This room has been replaced and is no longer active.'
+            : 'You do not have permission to post to this room'}
         </Text>
       );
     }
     return (
       <>
-        <div className={`room-input__option-container${attachment === null ? '' : ' room-attachment__option'}`}>
-          <input onChange={uploadFileChange} style={{ display: 'none' }} ref={uploadInputRef} type="file" />
-          <IconButton onClick={handleUploadClick} tooltip={attachment === null ? 'Upload' : 'Cancel'} src={CirclePlusIC} />
+        <div
+          className={`room-input__option-container${
+            attachment === null ? '' : ' room-attachment__option'
+          }`}
+        >
+          <input
+            onChange={uploadFileChange}
+            style={{ display: 'none' }}
+            ref={uploadInputRef}
+            type="file"
+          />
+          <IconButton
+            onClick={handleUploadClick}
+            tooltip={attachment === null ? 'Upload' : 'Cancel'}
+            src={CirclePlusIC}
+          />
         </div>
         <div ref={inputBaseRef} className="room-input__input-container">
           {roomTimeline.isEncrypted() && <RawIcon size="extra-small" src={ShieldIC} />}
@@ -399,7 +464,7 @@ function RoomViewInput({
                       closeMenu();
                     }}
                   />
-                ),
+                )
               );
             }}
             tooltip="Sticker"
@@ -408,7 +473,7 @@ function RoomViewInput({
           <IconButton
             onClick={(e) => {
               const cords = getEventCords(e);
-              cords.x += (document.dir === 'rtl' ? -80 : 80);
+              cords.x += document.dir === 'rtl' ? -80 : 80;
               cords.y -= 250;
               openEmojiBoard(cords, addEmoji);
             }}
@@ -425,15 +490,25 @@ function RoomViewInput({
     const fileType = attachment.type.slice(0, attachment.type.indexOf('/'));
     return (
       <div className="room-attachment">
-        <div className={`room-attachment__preview${fileType !== 'image' ? ' room-attachment__icon' : ''}`}>
-          {fileType === 'image' && <img alt={attachment.name} src={URL.createObjectURL(attachment)} />}
+        <div
+          className={`room-attachment__preview${
+            fileType !== 'image' ? ' room-attachment__icon' : ''
+          }`}
+        >
+          {fileType === 'image' && (
+            <img alt={attachment.name} src={URL.createObjectURL(attachment)} />
+          )}
           {fileType === 'video' && <RawIcon src={VLCIC} />}
           {fileType === 'audio' && <RawIcon src={VolumeFullIC} />}
-          {fileType !== 'image' && fileType !== 'video' && fileType !== 'audio' && <RawIcon src={FileIC} />}
+          {fileType !== 'image' && fileType !== 'video' && fileType !== 'audio' && (
+            <RawIcon src={FileIC} />
+          )}
         </div>
         <div className="room-attachment__info">
           <Text variant="b1">{attachment.name}</Text>
-          <Text variant="b3"><span ref={uploadProgressRef}>{`size: ${bytesToSize(attachment.size)}`}</span></Text>
+          <Text variant="b3">
+            <span ref={uploadProgressRef}>{`size: ${bytesToSize(attachment.size)}`}</span>
+          </Text>
         </div>
       </div>
     );
@@ -464,12 +539,15 @@ function RoomViewInput({
 
   return (
     <>
-      { replyTo !== null && attachReply()}
-      { attachment !== null && attachFile() }
-      <form className="room-input" onSubmit={(e) => { e.preventDefault(); }}>
-        {
-          renderInputs()
-        }
+      {replyTo !== null && attachReply()}
+      {attachment !== null && attachFile()}
+      <form
+        className="room-input"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        {renderInputs()}
       </form>
     </>
   );

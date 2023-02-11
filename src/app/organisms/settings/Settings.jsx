@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Settings.scss';
 
+import { useTranslation } from 'react-i18next';
 import initMatrix from '../../../client/initMatrix';
 import cons from '../../../client/state/cons';
 import settings from '../../../client/state/settings';
 import navigation from '../../../client/state/navigation';
 import {
   toggleSystemTheme, toggleMarkdown, toggleMembershipEvents, toggleNickAvatarEvents,
-  toggleNotifications, toggleNotificationSounds,
+  toggleNotifications, toggleNotificationSounds, toggleSelfTranslate,
 } from '../../../client/action/settings';
 import { usePermission } from '../../hooks/usePermission';
 
@@ -45,9 +46,15 @@ import CrossIC from '../../../../public/res/ic/outlined/cross.svg';
 import CinnySVG from '../../../../public/res/svg/cinny.svg';
 import { confirmDialog } from '../../molecules/confirm-dialog/ConfirmDialog';
 
+import '../../i18n.jsx'
+
+
+
 
 function AppearanceSection() {
   const [, updateState] = useState({});
+
+  const { t } = useTranslation();
 
   const handleSetLanguage = (evt) => {
     evt.preventDefault();
@@ -58,10 +65,20 @@ function AppearanceSection() {
     document.getElementById('set-button').getElementsByClassName("text-normal")[0].textContent = "Done!";
   };
 
+  const handleSetSelfLanguage = (evt) => {
+    evt.preventDefault();
+    const { keywordInput } = evt.target.elements;
+    const value = keywordInput.value.trim();
+    if (value === '') return;
+    settings.setTranslationSelfLanguage(value);
+    document.getElementById('set-self-button').getElementsByClassName("text-normal")[0].textContent = "Done!";
+  };
+
+
   return (
     <div className="settings-appearance">
       <div className="settings-appearance__card">
-        <MenuHeader>Theme</MenuHeader>
+        <MenuHeader>{t("translation.Organisms.Settings.theme.title")}</MenuHeader>
         <SettingTile
           title="Follow system theme"
           options={(
@@ -144,13 +161,38 @@ function AppearanceSection() {
         )}
         />
         <SettingTile
-          title="Custom Target Language"
+          title="Custom target language"
           content={(
             <div>
               <Text variant="b3">Set a language which you prefer. e.g.: English=EN</Text>
               <form onSubmit={handleSetLanguage}>
                 <Input name="keywordInput" required value={settings.getTranslationLanguage()} />
                 <Button variant="primary" type="submit" id="set-button">Set</Button>
+              </form>
+            </div>
+          )}
+        />
+        <SettingTile
+          title="Translate self messages"
+          options={(
+            <Toggle
+              isActive={settings.enableSelfTranslate}
+              onToggle={() => { toggleSelfTranslate(); updateState({}); }}
+            />
+          )}
+          content={<Text variant="b3">When you send message, we will automaticly translate to you prefered language</Text>}
+        />
+        <SettingTile
+          title="Self message target language"
+          content={(
+            <div>
+              <Text variant="b3">Set a language which you prefer. e.g.: English=EN</Text>
+              <form onSubmit={handleSetSelfLanguage}>
+                <Input name="keywordInput" required value={settings.getTranslationSelfLanguage()} 
+                disabled={!settings.enableSelfTranslate}/>
+                <Button variant="primary" type="submit" id="set-self-button"
+                disabled={!settings.enableSelfTranslate}
+                >Set</Button>
               </form>
             </div>
           )}
@@ -365,6 +407,7 @@ function useWindowToggle(setSelectedTab) {
 function Settings() {
   const [selectedTab, setSelectedTab] = useState(tabItems[0]);
   const [isOpen, requestClose] = useWindowToggle(setSelectedTab);
+  const { t } = useTranslation();
 
   const handleTabChange = (tabItem) => setSelectedTab(tabItem);
   const handleLogout = async () => {
@@ -377,7 +420,7 @@ function Settings() {
     <PopupWindow
       isOpen={isOpen}
       className="settings-window"
-      title={<Text variant="s1" weight="medium" primary>Settings</Text>}
+      title={<Text variant="s1" weight="medium" primary>{t("translation.Organisms.Settings.title")}</Text>}
       contentOptions={(
         <>
           <Button variant="danger" iconSrc={PowerIC} onClick={handleLogout}>
