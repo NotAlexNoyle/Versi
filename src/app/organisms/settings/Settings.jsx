@@ -8,7 +8,7 @@ import settings from '../../../client/state/settings';
 import navigation from '../../../client/state/navigation';
 import {
   toggleSystemTheme, toggleMarkdown, toggleMembershipEvents, toggleNickAvatarEvents,
-  toggleNotifications, toggleNotificationSounds, toggleSelfTranslate,
+  toggleNotifications, toggleNotificationSounds, toggleSelfTranslate, toggleReadReceipts, toggleHideNavigation
 } from '../../../client/action/settings';
 import { usePermission } from '../../hooks/usePermission';
 
@@ -48,7 +48,9 @@ import { confirmDialog } from '../../molecules/confirm-dialog/ConfirmDialog';
 
 import '../../i18n.jsx'
 
-
+let capabilities = {
+  privateReadReceipts: false,
+}
 
 
 function AppearanceSection() {
@@ -78,7 +80,7 @@ function AppearanceSection() {
   return (
     <div className="settings-appearance">
       <div className="settings-appearance__card">
-        <MenuHeader>{t("translation.Organisms.Settings.theme.title")}</MenuHeader>
+        <MenuHeader>{t("Theme")}</MenuHeader>
         <SettingTile
           title="Follow system theme"
           options={(
@@ -130,6 +132,16 @@ function AppearanceSection() {
             />
           )}
           content={<Text variant="b3">Hide membership change messages from room timeline. (Join, Leave, Invite, Kick and Ban)</Text>}
+        />
+        <SettingTile
+          title="Hide navigation by default"
+          options={(
+            <Toggle
+              isActive={settings.hideNavigation}
+              onToggle={() => { toggleHideNavigation(); updateState({}); }}
+            />
+          )}
+          content={<Text variant="b3">Hide the navigation bar by default, when cinny is opened.</Text>}
         />
         <SettingTile
           title="Hide nick/avatar events"
@@ -272,6 +284,7 @@ function EmojiSection() {
 }
 
 function SecuritySection() {
+  const [, updateState] = useState({});
   return (
     <div className="settings-security">
       <div className="settings-security__card">
@@ -301,6 +314,33 @@ function SecuritySection() {
           )}
         />
       </div>
+      <div className="settings-security__card">
+        <MenuHeader>Presence</MenuHeader>
+        <SettingTile
+          title="Send read receipts"
+          options={(
+            <Toggle
+              /** Always allow to switch receipts on. */
+              disabled={!capabilities.privateReadReceipts && settings.sendReadReceipts}
+              isActive={settings.sendReadReceipts}
+              onToggle={() => { toggleReadReceipts(); updateState({}); }}
+            />
+          )}
+          content={(
+            <>
+              <Text variant="b3">
+                Let other people know what messages you read.
+              </Text>
+              {!capabilities.privateReadReceipts
+                && (
+                <Text variant="b3">
+                  Making your read receipts private requires a compatible homeserver.
+                </Text>
+                )}
+            </>
+          )}
+        />
+      </div>
     </div>
   );
 }
@@ -314,10 +354,11 @@ function AboutSection() {
           <img width="60" height="60" src={CinnySVG} alt="Cinny logo" />
           <div>
             <Text variant="h2" weight="medium">
-              Cinny
-              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}`}</span>
+              Cinny Mod
+              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}.52`}</span>
             </Text>
             <Text>Yet another matrix client</Text>
+            <Text>Modded By WHK with magic & love</Text>
 
             <div className="settings-about__btns">
               <Button onClick={() => window.open('https://github.com/ajbura/cinny')}>Source code</Button>
@@ -404,9 +445,20 @@ function useWindowToggle(setSelectedTab) {
   return [isOpen, requestClose];
 }
 
+async function getCapabilities() {
+  const mx = initMatrix.matrixClient;
+  capabilities = {
+    privateReadReceipts: (await (Promise.all([
+      mx.doesServerSupportUnstableFeature('org.matrix.msc2285.stable'),
+      mx.isVersionSupported('v1.4')])
+    )).some((res) => res === true),
+  };
+}
+
 function Settings() {
   const [selectedTab, setSelectedTab] = useState(tabItems[0]);
   const [isOpen, requestClose] = useWindowToggle(setSelectedTab);
+  useEffect(getCapabilities, []);
   const { t } = useTranslation();
 
   const handleTabChange = (tabItem) => setSelectedTab(tabItem);
@@ -420,7 +472,7 @@ function Settings() {
     <PopupWindow
       isOpen={isOpen}
       className="settings-window"
-      title={<Text variant="s1" weight="medium" primary>{t("translation.Organisms.Settings.title")}</Text>}
+      title={<Text variant="s1" weight="medium" primary>{t("Settings")}</Text>}
       contentOptions={(
         <>
           <Button variant="danger" iconSrc={PowerIC} onClick={handleLogout}>

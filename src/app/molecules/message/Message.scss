@@ -400,6 +400,7 @@
   & pre {
     width: fit-content;
     max-width: 100%;
+    direction: initial;
     @include scrollbar.scroll;
     @include scrollbar.scroll__h;
     @include scrollbar.scroll--auto-hide;

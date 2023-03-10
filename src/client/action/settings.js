@@ -25,6 +25,12 @@ export function toggleMembershipEvents() {
   });
 }
 
+export function toggleHideNavigation() {
+  appDispatcher.dispatch({
+    type: cons.actions.settings.TOGGLE_HIDE_NAVIGATION,
+  });
+}
+
 export function toggleNickAvatarEvents() {
   appDispatcher.dispatch({
     type: cons.actions.settings.TOGGLE_NICKAVATAR_EVENT,
@@ -40,6 +46,12 @@ export function toggleSelfTranslate() {
 export function toggleNotifications() {
   appDispatcher.dispatch({
     type: cons.actions.settings.TOGGLE_NOTIFICATIONS,
+  });
+}
+
+export function toggleReadReceipts() {
+  appDispatcher.dispatch({
+    type: cons.actions.settings.TOGGLE_READ_RECEIPTS,
   });
 }
 

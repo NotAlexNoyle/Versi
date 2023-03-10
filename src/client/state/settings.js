@@ -28,12 +28,14 @@ class Settings extends EventEmitter {
 
     this.useSystemTheme = this.getUseSystemTheme();
     this.isMarkdown = this.getIsMarkdown();
+    this.hideNavigation = this.getHideNavigation();
     this.isPeopleDrawer = this.getIsPeopleDrawer();
     this.hideMembershipEvents = this.getHideMembershipEvents();
     this.hideNickAvatarEvents = this.getHideNickAvatarEvents();
     this.enableSelfTranslate = this.getEnableSelfTranslate();
     this._showNotifications = this.getShowNotifications();
     this.isNotificationSounds = this.getIsNotificationSounds();
+    this.sendReadReceipts = this.getSendReadReceipts();
 
     this.isTouchScreenDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
   }
@@ -135,6 +137,15 @@ class Settings extends EventEmitter {
     return settings.useSystemTheme;
   }
 
+  getHideNavigation() {
+    if (typeof this.hideNavigation === 'boolean') return this.hideNavigation;
+
+    const settings = getSettings();
+    if (settings === null) return false;
+    if (typeof settings.hideNavigation === 'undefined') return false;
+    return settings.hideNavigation;
+  }
+
   getIsMarkdown() {
     if (typeof this.isMarkdown === 'boolean') return this.isMarkdown;
 
@@ -203,6 +214,15 @@ class Settings extends EventEmitter {
     return settings.isNotificationSounds;
   }
 
+  getSendReadReceipts() {
+    if (typeof this.sendReadReceipts === 'boolean') return this.sendReadReceipts;
+
+    const settings = getSettings();
+    if (settings === null) return true;
+    if (typeof settings.sendReadReceipts === 'undefined') return true;
+    return settings.sendReadReceipts;
+  }
+
   setter(action) {
     const actions = {
       [cons.actions.settings.TOGGLE_SYSTEM_THEME]: () => {
@@ -222,6 +242,11 @@ class Settings extends EventEmitter {
         this.hideMembershipEvents = !this.hideMembershipEvents;
         setSettings('hideMembershipEvents', this.hideMembershipEvents);
         this.emit(cons.events.settings.MEMBERSHIP_EVENTS_TOGGLED, this.hideMembershipEvents);
+      },
+      [cons.actions.settings.TOGGLE_HIDE_NAVIGATION]: () => {
+        this.hideNavigation = !this.hideNavigation;
+        setSettings('hideNavigation', this.hideNavigation);
+        this.emit(cons.events.settings.HIDE_NAVIGATION_TOGGLED, this.hideNavigation);
       },
       [cons.actions.settings.TOGGLE_NICKAVATAR_EVENT]: () => {
         this.hideNickAvatarEvents = !this.hideNickAvatarEvents;
@@ -246,6 +271,11 @@ class Settings extends EventEmitter {
         this.isNotificationSounds = !this.isNotificationSounds;
         setSettings('isNotificationSounds', this.isNotificationSounds);
         this.emit(cons.events.settings.NOTIFICATION_SOUNDS_TOGGLED, this.isNotificationSounds);
+      },
+      [cons.actions.settings.TOGGLE_READ_RECEIPTS]: () => {
+        this.sendReadReceipts = !this.sendReadReceipts;
+        setSettings('sendReadReceipts', this.sendReadReceipts);
+        this.emit(cons.events.settings.READ_RECEIPTS_TOGGLED, this.sendReadReceipts);
       },
     };
 
