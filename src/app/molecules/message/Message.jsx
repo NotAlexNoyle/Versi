@@ -50,6 +50,7 @@ import TickMarkIC from '../../../../public/res/ic/outlined/tick-mark.svg';
 import CmdIC from '../../../../public/res/ic/outlined/cmd.svg';
 import BinIC from '../../../../public/res/ic/outlined/bin.svg';
 import TransIC from '../../../../public/res/ic/outlined/translate.svg';
+import repeatIC from '../../../../public/res/ic/outlined/repeat.svg';
 
 import { confirmDialog } from '../confirm-dialog/ConfirmDialog';
 import { getBlobSafeMimeType } from '../../../util/mimetypes';
@@ -552,6 +553,14 @@ function handleTextTranslate(mEvent) {
   openTextTranslate(mEvent);
 }
 
+async function handleRepeat(mEvent){
+  console.log(mEvent);
+  const opt = {};
+  opt.msgType = 'm.text';
+  initMatrix.roomsInput.setMessage(mEvent.sender.roomId, mEvent.clearEvent.content.body);
+  await initMatrix.roomsInput.sendInput(mEvent.sender.roomId, opt);
+}
+
 const MessageOptions = React.memo(({ roomTimeline, mEvent, edit, reply }) => {
   const { roomId, room } = roomTimeline;
   const mx = initMatrix.matrixClient;
@@ -590,6 +599,9 @@ const MessageOptions = React.memo(({ roomTimeline, mEvent, edit, reply }) => {
             </MenuItem>
             <MenuItem iconSrc={TransIC} onClick={() => handleTextTranslate(mEvent)}>
               Translate
+            </MenuItem>
+            <MenuItem iconSrc={repeatIC} onClick={() => handleRepeat(mEvent)}>
+              Repeat
             </MenuItem>
             {(canIRedact || senderId === mx.getUserId()) && (
               <>

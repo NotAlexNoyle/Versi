@@ -211,6 +211,11 @@ class RoomsInput extends EventEmitter {
       content.formatted_body = body.html;
     }
 
+    if(options.format === 'org.matrix.custom.html'){
+      content.format = 'org.matrix.custom.html';
+      content.formatted_body = options.formatted_body;
+    }
+
     if (edit) {
       content['m.new_content'] = { ...content };
       content['m.relates_to'] = {

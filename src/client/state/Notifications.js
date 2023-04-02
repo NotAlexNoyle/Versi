@@ -298,7 +298,9 @@ class Notifications extends EventEmitter {
   _deletePopupRoomNotis(roomId) {
     this.roomIdToPopupNotis.get(roomId)?.forEach((n) => {
       this.eventIdToPopupNoti.delete(n.tag);
-      n.close();
+      if(n.close){
+        n.close();
+      }
     });
     this.roomIdToPopupNotis.delete(roomId);
   }

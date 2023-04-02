@@ -89,7 +89,9 @@ function Client() {
 
   if (isLoading) {
     return (
+
       <div className="loading-display">
+        {/* <div className="watermark">Cinny Mod</div> */}
         <div className="loading__menu">
           <ContextMenu
             placement="bottom"
@@ -170,6 +172,18 @@ function Client() {
     initMatrix.roomsInput.emit(cons.events.roomsInput.ATTACHMENT_SET, file);
   }
 
+  // 盲水印实验性特性
+  // const watermark = document.querySelector('.watermark');
+  // for (let i = 0; i < window.innerHeight / watermark.offsetHeight + 1; i += 0.25) {
+  //   for (let j = 0; j < window.innerWidth / watermark.offsetWidth + 1; j += 0.25) {
+  //     const clone = watermark.cloneNode(true);
+  //     clone.style.top = i * watermark.offsetHeight + 'px';
+  //     clone.style.left = j * watermark.offsetWidth + 'px';
+  //     document.body.appendChild(clone);
+  //   }
+  // }
+
+
   return (
     <div
       className="client-container"
@@ -178,6 +192,7 @@ function Client() {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {/* <div className="watermark">Cinny Mod</div> */}
       <div className={`navigation__wrapper ${settings.hideNavigation && roomSelected ? toggleHidden : ''}`} ref={navWrapperRef}>
         <Navigation />
       </div>
@@ -191,6 +206,7 @@ function Client() {
       <DragDrop isOpen={dragCounter !== 0} />
     </div>
   );
+  
 }
 
 export default Client;

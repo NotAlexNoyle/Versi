@@ -31,6 +31,57 @@ export function processMxidAndReason(data) {
   };
 }
 
+function rainbowText(str) {
+  // 定义渐变颜色数组
+  const startColor = [255, 0, 0]; // 红色
+  const middleColor = [0, 255, 0]; // 绿色
+  const endColor = [0, 0, 255]; // 蓝色
+  const numSteps = str.length - 1;
+  const stepsToGreen = Math.round(numSteps / 2);
+  const stepsToBlue = numSteps - stepsToGreen;
+  const stepToGreen = [
+    (middleColor[0] - startColor[0]) / stepsToGreen,
+    (middleColor[1] - startColor[1]) / stepsToGreen,
+    (middleColor[2] - startColor[2]) / stepsToGreen
+  ];
+  const stepToBlue = [
+    (endColor[0] - middleColor[0]) / stepsToBlue,
+    (endColor[1] - middleColor[1]) / stepsToBlue,
+    (endColor[2] - middleColor[2]) / stepsToBlue
+  ];
+
+  // 生成 HTML 字符串
+  let html = '';
+  const currentColor = startColor.slice();
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < str.length; i++) {
+    // 转换颜色为 16 进制字符串
+    const hexColor = `#${  currentColor.map(c => {
+      const hex = Math.round(c).toString(16);
+      return hex.length === 1 ? `0${  hex}` : hex;
+    }).join('')}`;
+
+    // 将字符包装在 <font> 标签中，并设置颜色
+    const fontTag = `<font color="${hexColor}">${str[i]}</font>`;
+    html += fontTag;
+
+    // 计算下一个颜色
+    if (i < stepsToGreen) {
+      currentColor[0] += stepToGreen[0];
+      currentColor[1] += stepToGreen[1];
+      currentColor[2] += stepToGreen[2];
+    } else {
+      currentColor[0] += stepToBlue[0];
+      currentColor[1] += stepToBlue[1];
+      currentColor[2] += stepToBlue[2];
+    }
+  }
+
+  return html;
+}
+
+
+
 const commands = {
   me: {
     name: 'me',
@@ -197,6 +248,14 @@ const commands = {
     exe: (roomId) => {
       roomActions.convertToRoom(roomId);
     },
+  },
+  rainbow: {
+    name: 'rainbow',
+    description: 'Rainbow text',
+    exe: (roomId, data, onSuccess) => onSuccess(
+      data,
+      { msgtype:'m.text', format: 'org.matrix.custom.html', formatted_body: rainbowText(data) },
+    )
   },
 };
 

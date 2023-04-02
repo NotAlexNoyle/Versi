@@ -115,7 +115,12 @@ class InitMatrix extends EventEmitter {
       // ignore if failed to logout
     }
     await this.matrixClient.clearStores();
-    window.localStorage.clear();
+    window.userLocalStorage.clear();
+    const currentUser = window.localStorage.getItem("currentUser");
+    const loggedInUsers = new Set(JSON.parse(window.localStorage.getItem("loggedInUsers")));
+    loggedInUsers.delete(currentUser);
+    window.localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers));
+    window.localStorage.removeItem("currentUser");
     window.location.reload();
   }
 

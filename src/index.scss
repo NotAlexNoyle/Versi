@@ -306,6 +306,24 @@
   }
 }
 
+// .watermark {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 9999;
+//   font-size: 24px;
+//   color: #ccc;
+//   text-align: center;
+//   opacity: 0.03;
+//   transform: rotate(-45deg);
+//   transform-origin: 0 0;
+//   user-select: none;
+//   pointer-events: none;
+// }
+
+
 .butter-theme {
   /* background color | --bg-[background type]: value */
   --bg-surface: hsl(64, 6%, 14%);
@@ -329,6 +347,40 @@
   --ic-surface-high: rgb(255, 251, 222);
   --ic-surface-normal: rgba(255, 251, 222, 84%);
   --ic-surface-low: rgba(255, 251, 222, 64%);
+}
+
+.nga-theme {
+  /* background color | --bg-[background type]: value */
+  --bg-surface: rgb(254,248,231);
+  --bg-surface-transparent: hsla(0, 0%, 95%, 0);
+  --bg-surface-low: rgb(244,232,202);
+  --bg-surface-low-transparent: hsla(0, 0%, 91%, 0);
+  --bg-surface-extra-low: rgb(244,232,202);
+  --bg-surface-extra-low-transparent: hsla(0, 0%, 91%, 0);
+  --bg-positive: rgb(214, 189, 127);
+  --bg-primary: rgb(86, 23, 1);
+  --bg-primary-hover: rgb(180, 116, 98);
+  --bg-primary-active: rgb(180, 116, 98);
+  --ic-surface-normal: rgb(86, 23, 1);
+}
+
+.nga-green-theme {
+  /* background color | --bg-[background type]: value */
+  --bg-surface: rgb(241,247,245);
+  --bg-surface-transparent: hsla(0, 0%, 95%, 0);
+  --bg-surface-low: rgb(226,239,235);
+  --bg-surface-low-transparent: hsla(0, 0%, 91%, 0);
+  --bg-surface-extra-low: rgb(226,239,235);
+  --bg-surface-extra-low-transparent: hsla(0, 0%, 91%, 0);
+  --bg-positive: rgb(212,222,219);
+  --bg-primary: rgb(42,67,73);
+  --bg-primary-hover: rgb(125,162,160);
+  --bg-primary-active: rgb(125,162,160);
+  --ic-surface-normal: rgb(42,67,73);
+}
+
+.troll {
+  filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='3d-glasses' x='0' y='0' width='1' height='1'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='2' /%3E%3CfeColorMatrix values='1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 100 0' /%3E%3CfeOffset dx='5' dy='5' /%3E%3CfeColorMatrix values='0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0 0 0 0 0 1 0' /%3E%3CfeBlend mode='multiply' in2='SourceGraphic' /%3E%3C/filter%3E%3C/svg%3E#3d-glasses");
 }
 
 .font-primary {

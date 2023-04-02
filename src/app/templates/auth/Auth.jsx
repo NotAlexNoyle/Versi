@@ -25,6 +25,8 @@ import EyeIC from '../../../../public/res/ic/outlined/eye.svg';
 import EyeBlindIC from '../../../../public/res/ic/outlined/eye-blind.svg';
 import CinnySvg from '../../../../public/res/svg/cinny.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
+import colorMXID from '../../../util/colorMXID';
+import PeopleSelector from '../../molecules/people-selector/PeopleSelector';
 
 const LOCALPART_SIGNUP_REGEX = /^[a-z0-9_\-.=/]+$/;
 const BAD_LOCALPART_ERROR = 'Username can only contain characters a-z, 0-9, or \'=_-./\'';
@@ -537,13 +539,14 @@ function AuthCard() {
 function Auth() {
   const [loginToken, setLoginToken] = useState(getUrlPrams('loginToken'));
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     if (!loginToken) return;
-    if (localStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
+    if (window.userLocalStorage.getItem(cons.secretKey.BASE_URL) === undefined) {
       setLoginToken(null);
       return;
     }
-    const baseUrl = localStorage.getItem(cons.secretKey.BASE_URL);
+    const baseUrl = window.userLocalStorage.getItem(cons.secretKey.BASE_URL);
     try {
       await auth.loginWithToken(baseUrl, loginToken);
 
@@ -567,6 +570,37 @@ function Auth() {
                   <Text variant="h2" weight="medium">Cinny</Text>
                 </TitleWrapper>
               </Header>
+              {(() => {
+                let loggedInUsers = JSON.parse(window.localStorage.getItem("loggedInUsers"));
+                if (!loggedInUsers) {
+                  // 检查currentUser是否存在
+                  const currentUser = window.localStorage.getItem('cinny_user_id');
+                  if(currentUser){
+                    // 开始迁移
+                      window.localStorage.setItem('loggedInUsers', JSON.stringify([currentUser]));
+                      window.localStorage.setItem('currentUser', currentUser);
+                      window.localStorage.setItem(`${currentUser}.cinny_access_token`, window.localStorage.getItem('cinny_access_token'));
+                      window.localStorage.setItem(`${currentUser}.cinny_device_id`, window.localStorage.getItem('cinny_device_id'));
+                      window.localStorage.setItem(`${currentUser}.cinny_hs_base_url`, window.localStorage.getItem('cinny_hs_base_url'));
+                      window.localStorage.setItem(`${currentUser}.cinny_user_id`, window.localStorage.getItem('cinny_user_id'));
+                  } else{
+                    loggedInUsers = []
+                  }
+                }
+                return (
+                  loggedInUsers.map((userId) => (
+                      <PeopleSelector
+                        key={userId}
+                        onClick={() => {
+                          window.localStorage.setItem("currentUser", userId);
+                          window.location.reload();
+                        }}
+                        name={userId}
+                        color={colorMXID(userId)}
+                      />
+                    ))
+                );
+              })()}
               <div className="auth-card__content">
                 <AuthCard />
               </div>

@@ -188,6 +188,7 @@ function RoomViewInput({ roomId, roomTimeline, viewEvent }) {
   }, [roomId]);
 
   const sendBody = async (body, options) => {
+    console.log(options)
     const opt = options ?? {};
     if (!opt.msgType) opt.msgType = 'm.text';
     if (typeof opt.autoMarkdown !== 'boolean') opt.autoMarkdown = true;
@@ -218,7 +219,7 @@ function RoomViewInput({ roomId, roomTimeline, viewEvent }) {
       confirmDialog('Invalid Command', `"${cmdName}" is not a valid command.`, 'Alright');
       return;
     }
-    if (['me', 'shrug', 'plain'].includes(cmdName)) {
+    if (['me', 'shrug', 'plain', 'rainbow'].includes(cmdName)) {
       commands[cmdName].exe(roomId, cmdData, sendBody);
       return;
     }

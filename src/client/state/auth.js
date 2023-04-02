@@ -1,7 +1,10 @@
+import NamespacedStorage from './NamespacedStorage';
 import cons from './cons';
 
 function getSecret(key) {
-  return localStorage.getItem(key);
+  const user = global.localStorage.getItem("currentUser");
+  const storage = new NamespacedStorage(user, global.localStorage);
+  return storage.getItem(key);
 }
 
 const isAuthenticated = () => getSecret(cons.secretKey.ACCESS_TOKEN) !== null;

@@ -42,11 +42,15 @@ import BellIC from '../../../../public/res/ic/outlined/bell.svg';
 import InfoIC from '../../../../public/res/ic/outlined/info.svg';
 import PowerIC from '../../../../public/res/ic/outlined/power.svg';
 import CrossIC from '../../../../public/res/ic/outlined/cross.svg';
+import AddUserIC from '../../../../public/res/ic/outlined/add-user.svg';
 
 import CinnySVG from '../../../../public/res/svg/cinny.svg';
 import { confirmDialog } from '../../molecules/confirm-dialog/ConfirmDialog';
 
 import '../../i18n.jsx'
+import PeopleSelector from '../../molecules/people-selector/PeopleSelector';
+import colorMXID from '../../../util/colorMXID';
+import { openReusableDialog } from '../../../client/action/navigation';
 
 let capabilities = {
   privateReadReceipts: false,
@@ -101,6 +105,9 @@ function AppearanceSection() {
                 { text: 'Silver' },
                 { text: 'Dark' },
                 { text: 'Butter' },
+                { text: 'NGA'},
+                { text: 'NGA Green'},
+                { text: '?'}
               ]}
               onSelect={(index) => {
                 if (settings.useSystemTheme) toggleSystemTheme();
@@ -355,10 +362,10 @@ function AboutSection() {
           <div>
             <Text variant="h2" weight="medium">
               Cinny Mod
-              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}.52`}</span>
+              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}.5114514`}</span>
             </Text>
             <Text>Yet another matrix client</Text>
-            <Text>Modded By WHK with magic & love</Text>
+            <Text>Modded By WHK(a.k.a CroiX) with magic & love</Text>
 
             <div className="settings-about__btns">
               <Button onClick={() => window.open('https://github.com/ajbura/cinny')}>Source code</Button>
@@ -468,6 +475,51 @@ function Settings() {
     }
   };
 
+  const handleSwitchUsers = async () => {
+    const loggedInUsers = JSON.parse(window.localStorage.getItem("loggedInUsers"));
+
+    const renderUserSwitcher = () => (
+      <div>
+        {
+          loggedInUsers.map((userId) => {
+            const mx = initMatrix.matrixClient;
+            const user = mx.getUser(userId);
+            const avatarUrl = user.avatarUrl ? mx.mxcUrlToHttp(user.avatarUrl, 80, 80, 'crop') : null;
+            return (
+              <PeopleSelector
+                key={userId}
+                onClick={() => {
+                  if (userId !== window.localStorage.getItem("currentUser")) {
+                    window.localStorage.setItem("currentUser", userId);
+                    window.location.reload();
+                  }
+                }}
+                name={user.displayName}
+                avatarSrc={avatarUrl}
+                color={colorMXID(userId)}
+              />
+            );
+          })
+        }
+        <Button
+          variant="caution"
+          iconSrc={AddUserIC}
+          onClick={() => {
+            window.localStorage.removeItem("currentUser");
+            window.location.reload();
+          }}
+        >
+          Add user
+        </Button>
+      </div>
+    );
+
+    await openReusableDialog(
+      <Text variant="s1" weight="medium">Switch users</Text>,
+      renderUserSwitcher,
+    )
+  }
+
   return (
     <PopupWindow
       isOpen={isOpen}
@@ -475,6 +527,9 @@ function Settings() {
       title={<Text variant="s1" weight="medium" primary>{t("Settings")}</Text>}
       contentOptions={(
         <>
+          <Button variant="caution" iconSrc={AddUserIC} onClick={handleSwitchUsers}>
+            Switch users
+          </Button>
           <Button variant="danger" iconSrc={PowerIC} onClick={handleLogout}>
             Logout
           </Button>
