@@ -557,7 +557,11 @@ async function handleRepeat(mEvent){
   console.log(mEvent);
   const opt = {};
   opt.msgType = 'm.text';
-  initMatrix.roomsInput.setMessage(mEvent.sender.roomId, mEvent.clearEvent.content.body);
+  if(mEvent.clearEvent){
+    initMatrix.roomsInput.setMessage(mEvent.sender.roomId, mEvent.clearEvent.content.body);
+  } else {
+    initMatrix.roomsInput.setMessage(mEvent.sender.roomId, mEvent.event.content.body);
+  }
   await initMatrix.roomsInput.sendInput(mEvent.sender.roomId, opt);
 }
 

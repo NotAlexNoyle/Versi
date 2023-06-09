@@ -107,7 +107,7 @@ function AppearanceSection() {
                 { text: 'Butter' },
                 { text: 'NGA'},
                 { text: 'NGA Green'},
-                { text: '?'}
+                //{ text: '?'}
               ]}
               onSelect={(index) => {
                 if (settings.useSystemTheme) toggleSystemTheme();
@@ -362,7 +362,7 @@ function AboutSection() {
           <div>
             <Text variant="h2" weight="medium">
               Cinny Mod
-              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}.5114514`}</span>
+              <span className="text text-b3" style={{ margin: '0 var(--sp-extra-tight)' }}>{`v${cons.version}.52`}</span>
             </Text>
             <Text>Yet another matrix client</Text>
             <Text>Modded By WHK(a.k.a CroiX) with magic & love</Text>
