@@ -1,4 +1,4 @@
-# Cinny
+# Veri
 <p>
     <a href="https://github.com/NotAlexNoyle/Versi/releases">
     <a href="https://mastodon.gamedev.place/@trueog">
