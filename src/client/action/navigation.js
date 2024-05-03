@@ -195,3 +195,9 @@ export function openEmojiVerification(request, targetDevice) {
     targetDevice,
   });
 }
+
+export function requestClose() {
+  appDispatcher.dispatch({
+    type: cons.actions.navigation.REQUEST_CLOSE,
+  });
+}
