@@ -5,7 +5,7 @@ import initMatrix from '../../../client/initMatrix';
 import Button from '../../atoms/button/Button';
 import Text from '../../atoms/text/Text';
 
-import './RoomTimezone.scss';
+//import 'RoomTimezone.scss';
 
 function RoomTimezone({ roomId }) {
   const mx = initMatrix.matrixClient;
