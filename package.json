@@ -1,7 +1,7 @@
 {
-  "name": "cinny",
-  "version": "2.2.6",
-  "description": "Yet another matrix client",
+  "name": "versi",
+  "version": 0.1,
+  "description": "A liberated MIT-licensed fork of Cinny 2.2.4 maintained by and for TrueOG Network.",
   "main": "index.js",
   "engines": {
     "node": ">=16.0.0"
@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
-  "author": "Ajay Bura",
+  "author": "TrueOG Network",
   "license": "MIT",
   "dependencies": {
     "@capacitor/android": "4.7.1",

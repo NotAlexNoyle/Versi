@@ -12,16 +12,16 @@ function RoomTimezone({ roomId }) {
   const room = mx.getRoom(roomId);
   const userId = mx.getUserId();
 
-  const timezoneEventId = room.currentState.getStateEvents('in.cinny.shared_timezone', userId)?.event?.content?.user_timezone_event;
+  const timezoneEventId = room.currentState.getStateEvents('in.versi.shared_timezone', userId)?.event?.content?.user_timezone_event;
   const timezoneEvent = room.findEventById(timezoneEventId);
   const timezoneContent = timezoneEvent?.getContent();
 
   const [timezone, setTimezone] = useState(timezoneContent?.user_timezone);
 
   const clearTimezone = () => {
-    const eventKey = room.currentState.getStateEvents('in.cinny.shared_timezone', userId)?.event?.content?.user_timezone_event;
+    const eventKey = room.currentState.getStateEvents('in.versi.shared_timezone', userId)?.event?.content?.user_timezone_event;
     mx.redactEvent(roomId, eventKey);
-    mx.sendStateEvent(roomId, 'in.cinny.shared_timezone', { }, userId);
+    mx.sendStateEvent(roomId, 'in.versi.shared_timezone', { }, userId);
     setTimezone(null);
   };
 
@@ -30,11 +30,11 @@ function RoomTimezone({ roomId }) {
     setTimezone(userTimezone);
     const content = {
       user_timezone: userTimezone,
-      msgtype: 'in.cinny.share_timezone',
+      msgtype: 'in.versi.share_timezone',
     };
-    mx.sendEvent(roomId, 'in.cinny.share_timezone', content).then((event) => {
+    mx.sendEvent(roomId, 'in.versi.share_timezone', content).then((event) => {
       // Append the shared timezone event to the room state
-      mx.sendStateEvent(roomId, 'in.cinny.shared_timezone', { user_timezone_event: event.event_id }, userId);
+      mx.sendStateEvent(roomId, 'in.versi.shared_timezone', { user_timezone_event: event.event_id }, userId);
     });
   };
 

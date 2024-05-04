@@ -23,7 +23,7 @@ import ContextMenu, { MenuItem, MenuHeader } from '../../atoms/context-menu/Cont
 import ChevronBottomIC from '../../../../public/res/ic/outlined/chevron-bottom.svg';
 import EyeIC from '../../../../public/res/ic/outlined/eye.svg';
 import EyeBlindIC from '../../../../public/res/ic/outlined/eye-blind.svg';
-import CinnySvg from '../../../../public/res/svg/cinny.svg';
+import VersiSvg from '../../../../public/res/svg/versi.svg';
 import SSOButtons from '../../molecules/sso-buttons/SSOButtons';
 import colorMXID from '../../../util/colorMXID';
 import PeopleSelector from '../../molecules/people-selector/PeopleSelector';
@@ -565,24 +565,24 @@ function Auth() {
           {!loginToken && (
             <div className="auth-card">
               <Header>
-                <Avatar size="extra-small" imageSrc={CinnySvg} />
+                <Avatar size="extra-small" imageSrc={VersiSvg} />
                 <TitleWrapper>
-                  <Text variant="h2" weight="medium">Cinny</Text>
+                  <Text variant="h2" weight="medium">Versi</Text>
                 </TitleWrapper>
               </Header>
               {(() => {
                 let loggedInUsers = JSON.parse(window.localStorage.getItem("loggedInUsers"));
                 if (!loggedInUsers) {
                   // 检查currentUser是否存在
-                  const currentUser = window.localStorage.getItem('cinny_user_id');
+                  const currentUser = window.localStorage.getItem('versi_user_id');
                   if(currentUser){
                     // 开始迁移
                       window.localStorage.setItem('loggedInUsers', JSON.stringify([currentUser]));
                       window.localStorage.setItem('currentUser', currentUser);
-                      window.localStorage.setItem(`${currentUser}.cinny_access_token`, window.localStorage.getItem('cinny_access_token'));
-                      window.localStorage.setItem(`${currentUser}.cinny_device_id`, window.localStorage.getItem('cinny_device_id'));
-                      window.localStorage.setItem(`${currentUser}.cinny_hs_base_url`, window.localStorage.getItem('cinny_hs_base_url'));
-                      window.localStorage.setItem(`${currentUser}.cinny_user_id`, window.localStorage.getItem('cinny_user_id'));
+                      window.localStorage.setItem(`${currentUser}.versi_access_token`, window.localStorage.getItem('versi_access_token'));
+                      window.localStorage.setItem(`${currentUser}.versi_device_id`, window.localStorage.getItem('versi_device_id'));
+                      window.localStorage.setItem(`${currentUser}.versi_hs_base_url`, window.localStorage.getItem('versi_hs_base_url'));
+                      window.localStorage.setItem(`${currentUser}.versi_user_id`, window.localStorage.getItem('versi_user_id'));
                   } else{
                     loggedInUsers = []
                   }
@@ -610,13 +610,13 @@ function Auth() {
 
         <div className="auth-footer">
           <Text variant="b2">
-            <a href="https://cinny.in" target="_blank" rel="noreferrer">About</a>
+            <a href="https://chat.true-og.net" target="_blank" rel="noreferrer">About</a>
           </Text>
           <Text variant="b2">
-            <a href="https://github.com/ajbura/cinny/releases" target="_blank" rel="noreferrer">{`v${cons.version}`}</a>
+            <a href="https://github.com/NotAlexNoyle/Versi/releases" target="_blank" rel="noreferrer">{`v${cons.version}`}</a>
           </Text>
           <Text variant="b2">
-            <a href="https://twitter.com/cinnyapp" target="_blank" rel="noreferrer">Twitter</a>
+            <a href="https://mastodon.gamedev.place/@trueog" target="_blank" rel="noreferrer">Mastodon</a>
           </Text>
           <Text variant="b2">
             <a href="https://matrix.org" target="_blank" rel="noreferrer">Powered by Matrix</a>

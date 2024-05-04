@@ -91,7 +91,7 @@ function Client() {
     return (
 
       <div className="loading-display">
-        {/* <div className="watermark">Cinny Mod</div> */}
+        {/* <div className="watermark">Versi Mod</div> */}
         <div className="loading__menu">
           <ContextMenu
             placement="bottom"
@@ -110,7 +110,7 @@ function Client() {
         <Text className="loading__message" variant="b2">{loadingMsg}</Text>
 
         <div className="loading__appname">
-          <Text variant="h2" weight="medium">Cinny</Text>
+          <Text variant="h2" weight="medium">Versi</Text>
         </div>
       </div>
     );
@@ -192,7 +192,7 @@ function Client() {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* <div className="watermark">Cinny Mod</div> */}
+      {/* <div className="watermark">Versi Mod</div> */}
       <div className={`navigation__wrapper ${settings.hideNavigation && roomSelected ? toggleHidden : ''}`} ref={navWrapperRef}>
         <Navigation />
       </div>

@@ -1,7 +1,7 @@
 {
-  "name": "Cinny",
-  "short_name": "Cinny",
-  "description": "Yet another matrix client",
+  "name": "Versi",
+  "short_name": "Versi",
+  "description": "A Libre matrix client by TrueOG Network",
   "dir": "auto",
   "lang": "en-US",
   "display": "standalone",

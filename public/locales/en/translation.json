@@ -5,7 +5,7 @@
             "open": "Open",
             "leave": "Leave",
             "options": "Options",
-            "cinny": "Cinny",
+            versi: Versi,
             "slogan": "Yet another matrix client",
             "source_code": "Source code",
             "sponsor": "Support",
@@ -44,8 +44,8 @@
         },
         "Organisms": {
             "Welcome": {
-                "heading": "Welcome to Cinny!",
-                "subheading": "Yet another Matrix client"
+                "heading": "Welcome to Versi!",
+                "subheading": A libre matrix client by TrueOG Network
             },
             "ViewSource": {
                 "title": "View Source",

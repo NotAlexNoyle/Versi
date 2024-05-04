@@ -1,9 +1,10 @@
 # Versi
 <p>
     <a href="https://github.com/NotAlexNoyle/Versi/releases">Download</a> | 
-    <a href="https://mastodon.gamedev.place/@trueog">Follow</a> | 
+    <a href="https://mastodon.gamedev.place/@trueog">Mastodon</a> | 
     <a href="https://store.trueog.net">Donate</a> | 
-    <a href="https://true-og.net">Join</a>
+    <a href="https://true-og.net">Join TrueOG Network</a>
+        <img alt="Versi Logo" src="https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/assets/versi-logo-small.png"></a>
 </p>
 
 Versi is a liberated MIT-licensed fork of [Cinny](https://github.com/cinnyapp/cinny) 2.2.4 maintained by and for [TrueOG Network](https://true-og.net/).
@@ -52,7 +53,7 @@ npm run build # Compiles the app into the dist/ directory
 
 Copyright (c) 2021-present Ajay Bura (ajbura)
 
-Code licensed under the MIT License: <[http://opensource.org/licenses/MIT](https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/LICENSE.md)>
+Code licensed under the [MIT License](https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/LICENSE.md).
 
 Original graphics from [Cinny](https://github.com/cinnyapp/cinny) licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 

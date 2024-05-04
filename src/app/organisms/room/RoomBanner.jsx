@@ -25,7 +25,7 @@ function RoomBanner({ roomId }) {
     partner = room.getAvatarFallbackMember();
   }
 
-  const timezoneEventId = room.currentState.getStateEvents('in.cinny.shared_timezone', partner?.userId)?.event?.content?.user_timezone_event;
+  const timezoneEventId = room.currentState.getStateEvents('in.versi.shared_timezone', partner?.userId)?.event?.content?.user_timezone_event;
   const timezoneEvent = room.findEventById(timezoneEventId);
 
   let timezoneContent = null;

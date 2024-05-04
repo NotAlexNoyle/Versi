@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'today.icarus.cinny',
-  appName: 'Cinny',
+  appId: 'net.trueog.versi',
+  appName: 'Versi',
   webDir: 'dist',
   bundledWebRuntime: false,
 };
