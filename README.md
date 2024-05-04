@@ -3,9 +3,10 @@
     <a href="https://github.com/NotAlexNoyle/Versi/releases">Download</a> | 
     <a href="https://mastodon.gamedev.place/@trueog">Follow</a> | 
     <a href="https://store.trueog.net">Donate</a> | 
+    <a href="https://true-og.net">Join</a>
 </p>
 
-Versi is a liberated MIT-licensed fork of Cinny 2.2.4 maintained by and for [TrueOG Network](https://true-og.net/).
+Versi is a liberated MIT-licensed fork of [Cinny](https://github.com/cinnyapp/cinny) 2.2.4 maintained by and for [TrueOG Network](https://true-og.net/).
 
 Versi is named for Calotes versicolor, a predator of the Cinnyris asiaticus. It also means "an account or description from a particular point of view, especially as contrasted with another account.", which calls attention to the permissive vs copyleft licensing conflict between Versi and Cinny.
 
@@ -40,10 +41,12 @@ npm ci # Installs all dependencies
 npm start # Serve a development version
 ```
 
-To build the app:
+To build Versi:
 ```sh
 npm run build # Compiles the app into the dist/ directory
 ```
+
+## Changes
 
 ## License
 
@@ -51,4 +54,6 @@ Copyright (c) 2021-present Ajay Bura (ajbura)
 
 Code licensed under the MIT License: <[http://opensource.org/licenses/MIT](https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/LICENSE.md)>
 
-Graphics licensed under CC-BY 4.0: <https://creativecommons.org/licenses/by/4.0/>
+Original graphics from [Cinny](https://github.com/cinnyapp/cinny) licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+Original graphics from [TrueOG Network](https://github.com/true-og/true-og) are released into the public domain via [The Unlicense](https://github.com/true-og/true-og/blob/main/LICENSE).
