@@ -5,6 +5,7 @@
     <a href="https://store.trueog.net">Donate</a> | 
     <a href="https://true-og.net">Join TrueOG Network</a>
     <br>
+    <br>
     <img alt="Versi Logo" src="https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/assets/versi-logo.png"></a>
 </p>
 
@@ -49,6 +50,9 @@ npm run build # Compiles the app into the dist/ directory
 ```
 
 ## Changes
+- Changed branding from Cinny to Versi.
+- Updated dependencies, patched security vulnerabilities.
+- Close settings and search with escape key (credit to MyBeansAreBaked).
 
 ## License
 
