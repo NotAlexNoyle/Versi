@@ -4,7 +4,8 @@
     <a href="https://mastodon.gamedev.place/@trueog">Mastodon</a> | 
     <a href="https://store.trueog.net">Donate</a> | 
     <a href="https://true-og.net">Join TrueOG Network</a>
-        <img alt="Versi Logo" src="https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/assets/versi-logo-small.png"></a>
+    <br>
+    <img alt="Versi Logo" src="https://raw.githubusercontent.com/NotAlexNoyle/Versi/dev/assets/versi-logo.png"></a>
 </p>
 
 Versi is a liberated MIT-licensed fork of [Cinny](https://github.com/cinnyapp/cinny) 2.2.4 maintained by and for [TrueOG Network](https://true-og.net/).
